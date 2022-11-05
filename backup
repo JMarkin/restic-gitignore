@@ -6,10 +6,10 @@ INC_FILE=/tmp/backup_files
 INC_FILE_IGNORE="$INC_FILE"_with_ignore
 INC_FILE_EXCLUDE="$INC_FILE"_exclude
 
-rg --no-ignore --hidden  --sort path --files . > $INC_FILE_IGNORE
-rg --hidden  --sort path --files . > $INC_FILE
+fd -H -I --full-path . > $INC_FILE_IGNORE
+fd -H --full-path . > $INC_FILE
 
-diff --changed-group-format="%>" --unchanged-group-format="" $INC_FILE $INC_FILE_IGNORE > $INC_FILE_EXCLUDE
+cat $INC_FILE $INC_FILE_IGNORE | sort | uniq -u > $INC_FILE_EXCLUDE
 
 restic backup --exclude-file=$INC_FILE_EXCLUDE ./
 
